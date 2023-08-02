@@ -4,6 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+
 public class SistemaVendaPastel {
     private List<Cliente> clientes;
     private List<Pedido> pedidos;
@@ -188,6 +195,8 @@ public class SistemaVendaPastel {
 
         pedidoEncerrar.encerrarPedido();
         System.out.println("Pedido encerrado com sucesso!");
+
+        salvarPedidoEncerrado(pedidoEncerrar);
     }
 
     public double calcularTotalPedido(Pedido pedido) {
@@ -219,6 +228,29 @@ public class SistemaVendaPastel {
 
         System.out.println("Perfil do cliente editado com sucesso!");
     }
+
+    public void salvarPedidoEncerrado(Pedido pedido) {
+        String caminhoPasta = "D:/Java/pastel/pedidos/";
+        String nomeArquivo = caminhoPasta + "pedido_" + pedido.getCliente().getNome() + ".txt";
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(nomeArquivo))) {
+            writer.write("Cliente: " + pedido.getCliente().getNome());
+            writer.newLine();
+            writer.write("Endereço: " + pedido.getCliente().getEndereco());
+            writer.newLine();
+            writer.write("Itens do pedido:");
+            writer.newLine();
+            for (ItemPedido item : pedido.getItens()) {
+                writer.write(" - " + item.getQuantidade() + "x " + item.getPastel().getNome() + " - R$ " + item.getPastel().getPreco());
+                writer.newLine();
+            }
+            writer.write("Total do pedido: R$ " + calcularTotalPedido(pedido));
+            writer.newLine();
+            System.out.println("Arquivo gerado com sucesso: " + nomeArquivo);
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar o arquivo: " + e.getMessage());
+        }
+    }
+
 
 }
 

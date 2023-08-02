@@ -1,0 +1,5 @@
+Cliente: regi
+Endereço: pavo
+Itens do pedido:
+ - 1x pastel de queijo - R$ 5.0
+Total do pedido: R$ 5.0
